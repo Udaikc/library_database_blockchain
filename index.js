@@ -5,6 +5,11 @@ const bodyParser = require('body-parser');
 const bcrypt = require("bcrypt");
 const flash = require("express-flash");
 const session = require("express-session");
+const passport = require("passport");
+
+const initializePassport = require("./passportconfig");
+
+initializePassport(passport);
 
 app.use(session({
   secret: "secret",
@@ -15,6 +20,8 @@ app.use(session({
 }
 
 ));
+app.use(passport.initialize);
+app.use(passport.session());
 
 app.use(flash());
 
@@ -88,11 +95,21 @@ app.post('/user/register', async (req, res) => {
   }
 });
 
+app.port('user/login', passport.authenticate("local", {
+  successRedirect: "user/dashboard",
+  failureRedirect: "user/login",
+  failureFlash: true
+}));
+
 app.get('/user/dashboard', (req, res) => {
   res.render("dashboard", { user: "udai" });
 });
 
-
+app.get("user/logouts", (req, res) => {
+  req.logOut();
+  req.flash("sucess_msg", "you have sucessfully logged out");
+  res.redirect("/user/login");
+});
 
 app.listen(port, (req, res) => {
   console.log(`connected to ${port}`);

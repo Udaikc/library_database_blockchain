@@ -81,6 +81,13 @@
                 </li>
                 <% } %>
         </ul>
+        <ul>
+            <% if (messages.error) { %>
+                <li>
+                    <%= messages.error %>
+                </li>
+                <% } %>
+        </ul>
         <div ng-app="myApp" ng-controller="LoginController">
             <h2>Login Page</h2>
             <form action="/user/login" method="POST">
