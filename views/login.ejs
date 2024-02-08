@@ -74,6 +74,13 @@
     </header>
 
     <div class="container">
+        <ul>
+            <% if (messages.sucess_msg) { %>
+                <li>
+                    <%= messages.sucess_msg %>
+                </li>
+                <% } %>
+        </ul>
         <div ng-app="myApp" ng-controller="LoginController">
             <h2>Login Page</h2>
             <form action="/user/login" method="POST">

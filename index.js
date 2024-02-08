@@ -6,8 +6,6 @@ const bcrypt = require("bcrypt");
 const flash = require("express-flash");
 const session = require("express-session");
 
-console.log(pool);
-
 app.use(session({
   secret: "secret",
 
@@ -60,7 +58,7 @@ app.post('/user/register', async (req, res) => {
 
     pool.query(
       `SELECT * FROM lib_user WHERE email = $1`,
-      [email],
+      [usn],
       (err, results) => {
         if (err) {
           throw err;
@@ -70,6 +68,19 @@ app.post('/user/register', async (req, res) => {
         if (results.rows.length > 0) {
           errors.push({ message: "user already registered" });
           res.render("register", { errors })
+        } else {
+          pool.query(`INSERT INTO lib_user(username,email,usn,password)
+          VALUES ($1 ,$2, $3, $4)
+          RETURNING usn , password`, [name, email, usn, hashedpassword], (err, results) => {
+            if (err) {
+              throw err;
+            }
+            console.log(results.rows);
+            req.flash("sucess_msg", "you are now registered please log in");
+            res.redirect("/user/login");
+          }
+
+          );
         }
       }
     );
