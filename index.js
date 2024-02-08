@@ -1,42 +1,29 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
-const pg = require('pg');
 
-// Database connection details
-const dbConfig = {
-  host: 'localhost',
-  database: 'library_db',
-  user: 'postgres',
-  password: 'udai'
-};
 
-// Connect to PostgreSQL
-const pool = new pg.Pool(dbConfig);
+const port = process.env.port || 4000;
 
-// Parse incoming form data
-app.use(bodyParser.urlencoded({ extended: false }));
+app.set("view engine","ejs");
 
-// Route for form submission
-app.post('/register', async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-
-    // Validate and sanitize user input (add validation logic here)
-
-    const client = await pool.connect();
-    const query = `INSERT INTO users (username, email, password) VALUES ($1, $2, $3)`;
-    await client.query(query, [username, email, password]);
-    res.send('Registration successful!');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Registration failed.');
-  } finally {
-    await client.release();
-  }
+app.get('/',(req,res)=>{
+  res.render("index");
 });
 
-// Start the server
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+app.get('/user/login',(req,res)=>{
+    res.render("login");
 });
+
+app.get('/user/register',(req,res)=>{
+  res.render("register");
+});
+
+app.get('/user/dashboard',(req,res)=>{
+  res.render("dashboard",{user:"udai"});
+});
+
+
+
+app.listen(port,(req,res)=>{
+  console.log(`connected to ${port}`);
+})
