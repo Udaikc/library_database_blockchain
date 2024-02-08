@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('register_image.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        header {
+            text-align: center;
+            margin: 0;
+        }
+
+        header img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 100%;
+            margin: auto;
+            /* Center the container */
+        }
+
+        form {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="https://sjbit.edu.in/" target="_blank"><img src="header.jpg.png" alt="Header Image"></a>
+    </header>
+
+    <div class="container">
+        <h2>Registration Form</h2>
+        <form id="sampleForm" action="/register" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="usn">USN:</label>
+            <input type="text" id="usn" name="usn" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+
+            <button type="button" onclick="SubmitForm()">Submit</button><br><br>
+
+            <a href="#"><u>Login in</u></a>
+        </form>
+    </div>
+
+    <script>
+        function submitForm() {
+            var username = docu
+            ment.getElementById("username").value;
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+
+            if (username && email && password) {
+                alert("Form submitted!\nUsername: " + username + "\nEmail: " + email);
+            } else {
+                alert("Please fill in all fields.");
+            }
+        }
+    </script>
+</body>
+
+</html>
