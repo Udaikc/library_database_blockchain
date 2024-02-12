@@ -13,20 +13,29 @@ initializePassport(passport);
 
 app.use(session({
   secret: "secret",
-
   resave: false,
-
   saveUninitialized: false
-}
-
-));
-app.use(passport.initialize);
+}));
+app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(flash());
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+
+app.use(
+  session({
+    // Key we want to keep secret which will encrypt all of our information
+    secret: process.env.SESSION_SECRET,
+    // Should we resave our session variables if nothing has changes which we dont
+    resave: false,
+    // Save empty value if there is no vaue which we do not want to do
+    saveUninitialized: false
+  })
+);
+
 const port = process.env.port || 4000;
 
 app.set("view engine", "ejs");
@@ -95,14 +104,25 @@ app.post('/user/register', async (req, res) => {
   }
 });
 
-app.port('user/login', passport.authenticate("local", {
-  successRedirect: "user/dashboard",
-  failureRedirect: "user/login",
-  failureFlash: true
-}));
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect("/users/dashboard");
+  }
+  next();
+}
+app.get("/users/register", checkAuthenticated, (req, res) => {
+  res.render("register.ejs");
+});
+
+app.get("/users/login", checkAuthenticated, (req, res) => {
+  // flash sets a messages variable. passport sets the error message
+  console.log(req.session.flash.error);
+  res.render("login.ejs");
+});
+
 
 app.get('/user/dashboard', (req, res) => {
-  res.render("dashboard", { user: "udai" });
+  res.render('dashboard', { username: req.user.name });
 });
 
 app.get("user/logouts", (req, res) => {
