@@ -7,6 +7,8 @@ const flash = require("express-flash");
 const session = require("express-session");
 const passport = require("passport");
 
+
+
 app.use(express.static('public'))
 
 const initializePassport = require("./passportconfig");
@@ -123,15 +125,26 @@ app.get("/users/login", checkAuthenticated, (req, res) => {
 });
 
 
-app.get('/user/dashboard', (req, res) => {
-  res.render('dashboard', { username: req.user.name });
-});
+
 
 app.get("user/logouts", (req, res) => {
   req.logOut();
   req.flash("sucess_msg", "you have sucessfully logged out");
   res.redirect("/user/login");
 });
+
+app.get('/user/dashboard', (req, res) => {
+  pool.query('SELECT * FROM books', (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error fetching books');
+      return;
+    }
+    const books = result.rows;
+    res.render('dashboard', { books }); // Assuming your EJS template is named 'dashboard.ejs'
+  });
+});
+
 
 app.listen(port, (req, res) => {
   console.log(`connected to ${port}`);
