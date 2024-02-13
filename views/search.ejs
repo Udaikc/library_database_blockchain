@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        header {
+            text-align: center;
+            margin: 0;
+        }
+
+        header img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+            height: 500px;
+            width: 320px;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-img-top {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 300px;
+            width: 300px;
+        }
+
+        .card-body {
+            padding: 20;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            color: #6c757d;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="https://sjbit.edu.in/" target="_blank"><img src="/images/header.jpg.png" alt="Header Image"></a>
+    </header>
+    <div class="container">
+        <div class="row">
+            <% if (searchResults.length> 0) { %>
+                <% searchResults.forEach(book=> { %>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <center>
+                                <img src="<%= book.book_url %>" class="card-img-top" alt="Book Cover">
+                            </center>
+                            <div class="card-body">
+                                <h5 class="card-title">Book ID: <%= book.book_id %>
+                                </h5>
+                                <h5 class="card-title">Title: <%= book.title %>
+                                </h5>
+                                <p class="card-text"><strong>Author:</strong>
+                                    <%= book.author_name %>
+                                </p>
+                                <p class="card-text"><strong>Published Year:</strong>
+                                    <%= book.published_year %>
+                                </p>
+                                <a href="/books/<%= book.book_id %>" class="btn btn-primary btn-block">Add To Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                        <% } else { %>
+                            <p>No results found.</p>
+                            <% } %>
+        </div>
+    </div>
+
+</body>
+
+</html>

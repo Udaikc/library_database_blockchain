@@ -133,7 +133,7 @@ app.get("user/logouts", (req, res) => {
   res.redirect("/user/login");
 });
 
-app.get('/user/dashboard', (req, res) => {
+app.get('/users/dashboard', (req, res) => {
   pool.query('SELECT * FROM books', (err, result) => {
     if (err) {
       console.error(err);
@@ -145,6 +145,20 @@ app.get('/user/dashboard', (req, res) => {
   });
 });
 
+app.get("/users/search", (req, res) => {
+  const query = req.query.query;
+
+  // Query PostgreSQL database for books with titles similar to the search query
+  pool.query("SELECT * FROM books WHERE title ILIKE $1", ['%' + query + '%'], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error searching in the database");
+      return;
+    }
+    const searchResults = result.rows;
+    res.render("search", { searchResults });
+  });
+});
 
 app.listen(port, (req, res) => {
   console.log(`connected to ${port}`);
