@@ -7,6 +7,8 @@ const flash = require("express-flash");
 const session = require("express-session");
 const passport = require("passport");
 
+app.use(express.static('public'))
+
 const initializePassport = require("./passportconfig");
 
 initializePassport(passport);
