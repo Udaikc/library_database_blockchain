@@ -22,5 +22,6 @@ bcrypt
 express-session
 express-flash
 passport
+ejs
 
 
