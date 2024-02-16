@@ -96,7 +96,8 @@
                                 <p class="card-text"><strong>Published Year:</strong>
                                     <%= book.published_year %>
                                 </p>
-                                <a href="/books/<%= book.book_id %>" class="btn btn-primary btn-block">Add To Cart</a>
+                                <a href="/users/addtocart?book_id=<%= book.book_id %>"
+                                    class="btn btn-primary btn-block">Add To Cart</a>
                             </div>
                         </div>
                     </div>

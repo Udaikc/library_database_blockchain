@@ -124,7 +124,24 @@ app.get("/users/login", checkAuthenticated, (req, res) => {
   res.render("login.ejs");
 });
 
+app.get('/users/addbooks', (req, res) => {
+  res.render("addbooks")
+})
 
+app.post('/users/addbooks', (req, res) => {
+  const { title, author_name, published_year, total_number, book_url } = req.body;
+
+  // Insert the book into the database
+  pool.query('INSERT INTO books (title, author_name, published_year,total_number,book_url) VALUES ($1, $2, $3, $4, $5)', [title, author_name, published_year, total_number, book_url], (err, result) => {
+    if (err) {
+      console.error('Error adding book:', err);
+      res.status(500).send('Error adding book');
+    } else {
+      console.log('Book added successfully');
+      res.redirect('/users/dashboard');
+    }
+  });
+});
 
 
 app.get("user/logouts", (req, res) => {
@@ -159,6 +176,32 @@ app.get("/users/search", (req, res) => {
     res.render("search", { searchResults });
   });
 });
+
+// GET request handler for /users/addtocart route
+app.get("/users/addtocart", (req, res) => {
+  const bookId = req.query.book_id;
+  console.log(bookId);
+
+  // Query PostgreSQL database for the book with the specified book_id
+  pool.query("SELECT * FROM books WHERE book_id = $1", [bookId], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error retrieving book information from the database");
+      return;
+    }
+
+    const books = result.rows; // Assuming there's only one book with the specified ID
+
+    if (!books) {
+      res.status(404).send("Book not found");
+      return;
+    }
+
+    // Render the addtocart.ejs template and pass the book information
+    res.render("addtocart", { books });
+  });
+});
+
 
 app.listen(port, (req, res) => {
   console.log(`connected to ${port}`);

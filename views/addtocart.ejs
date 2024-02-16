@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add to Cart</title>
+    <style>
+        header {
+            text-align: center;
+            margin: 0;
+        }
+
+        header img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .book-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            list-style: none;
+            padding: 0;
+        }
+
+        .book-card {
+            width: 30%;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .book-image {
+            width: 100%;
+            height: auto;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .book-details {
+            padding: 15px;
+        }
+
+        .book-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .book-author {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .book-buttons {
+            text-align: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #f90;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #f60;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="https://sjbit.edu.in/" target="_blank"><img src="/images/header.jpg.png" alt="Header Image"></a>
+    </header>
+    <div class="container">
+        <h1>Add to Cart</h1>
+        <ul class="book-list">
+            <% books.forEach(book=> { %>
+                <li class="book-card">
+                    <img class="book-image" src="<%= book.book_url %>" alt="<%= book.title %>">
+                    <div class="book-details">
+                        <p class="book-title">
+                            <%= book.title %>
+                        </p>
+                        <p class="book-author">by <%= book.author_name %>
+                        </p>
+                        <!-- Add more book details as needed -->
+                        <div class="book-buttons">
+                            <a href="/users/addtocart?book_id=<%= book.book_id %>" class="btn">Add to Cart</a>
+                        </div>
+                    </div>
+                </li>
+                <% }); %>
+        </ul>
+    </div>
+</body>
+
+</html>

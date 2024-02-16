@@ -22,6 +22,7 @@
         }
 
         .container {
+            max-width: 800px;
             margin-top: 50px;
         }
 
@@ -30,8 +31,9 @@
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s;
-            height: 500px;
-            width: 320px;
+            width: 250px;
+            margin: 20px;
+            background-color: #ffffff;
         }
 
         .card:hover {
@@ -41,37 +43,41 @@
         .card-img-top {
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
-            height: 300px;
-            width: 300px;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
         }
 
         .card-body {
-            padding: 20;
+            padding: 20px;
         }
 
         .card-title {
-            font-size: 1.25rem;
+            font-size: 1rem;
             font-weight: bold;
             margin-bottom: 10px;
         }
 
         .card-text {
             color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 5px;
         }
 
         .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: #FF9900;
+            border-color: #FF9900;
+            width: 100%;
         }
 
         .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
+            background-color: #FFA940;
+            border-color: #FFA940;
         }
 
         .container1 {
             max-width: 800px;
-            margin: 50px auto;
+            margin: 20px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
@@ -122,7 +128,7 @@
     </header>
     <div class="container1">
         <form id="searchForm" action="/users/search" method="GET">
-            <input type="text" id="searchInput" name="query" placeholder="Enter your search query">
+            <input type="text" id="searchInput" name="query" placeholder="Enter Book Name">
             <button type="submit">Search</button>
         </form>
     </div>
@@ -132,26 +138,36 @@
             <% books.forEach(book=> { %>
                 <div class="col-md-4">
                     <div class="card">
-                        <center>
-                            <img src="<%= book.book_url %>" class="card-img-top" alt="Book Cover">
-                        </center>
+                        <img src="<%= book.book_url %>" class="card-img-top" alt="Book Cover">
                         <div class="card-body">
                             <h5 class="card-title">
                                 <%= book.title %>
                             </h5>
-                            <p class="card-text"><strong>Author:</strong>
-                                <%= book.author_name %>
+                            <p class="card-text">Author: <%= book.author_name %>
                             </p>
-                            <p class="card-text"><strong>Published Year:</strong>
-                                <%= book.published_year %>
+                            <p class="card-text">Published Year: <%= book.published_year %>
                             </p>
-                            <a href="/books/<%= book.book_id %>" class="btn btn-primary btn-block">Add To Cart</a>
+                            <% if (book.availability) { %>
+                                <div class="book-available">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="book_<%= book.book_id %>"
+                                            value="<%= book.book_id %>">
+                                        <label class="form-check-label" for="book_<%= book.book_id %>">Book
+                                            Available</label>
+                                    </div>
+                                </div>
+                                <% } else { %>
+                                    <div class="book-not-available">
+                                        <p>Book Not Available</p>
+                                    </div>
+                                    <% } %>
                         </div>
                     </div>
                 </div>
                 <% }); %>
         </div>
     </div>
+
 
 </body>
 
