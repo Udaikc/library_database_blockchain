@@ -5,14 +5,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Details</title>
+    <style>
+        header {
+            text-align: center;
+            margin: 0;
+        }
+
+        header img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-details {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-image {
+            width: 100px;
+            /* Adjust image size as needed */
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .return-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .return-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
-    <div>
+    <header>
+        <a href="https://sjbit.edu.in/" target="_blank"><img src="/images/header.jpg.png" alt="Header Image"></a>
+    </header>
+    <div class="container">
+
         <p>USN: <%= usn %>
         </p>
-        <p>Book ID: <%= book_id %>
-        </p>
+        <!-- Print other user details as needed -->
+
+        <h2>Book Details</h2>
+        <% if (bookData.length> 0) { %>
+            <% bookData.forEach(book=> { %>
+                <div class="book-details">
+                    <img class="book-image" src="<%= book.book_url %>" alt="<%= book.title %>">
+                    <div>
+                        <p><strong>Title:</strong>
+                            <%= book.title %>
+                        </p>
+                        <p><strong>Author:</strong>
+                            <%= book.author_name %>
+                        </p>
+                        <p><strong>Published Year:</strong>
+                            <%= book.published_year %>
+                        </p>
+                        <!-- Add more book details as needed -->
+                    </div>
+                </div>
+                <% }); %>
+                    <% } else { %>
+                        <p>No book details found</p>
+                        <% } %>
+                            <center>
+                                <button class="return-button">Return</button>
+                            </center>
     </div>
 </body>
 

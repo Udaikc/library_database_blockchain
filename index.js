@@ -223,7 +223,48 @@ app.get('/users/addtocart', (req, res) => {
 
 app.get('/users/ordernow', (req, res) => {
   const { usn, book_id } = req.query;
-  res.render('ordernow', { usn, book_id });
+
+  const today = new Date();
+
+  const endDate = new Date();
+  endDate.setDate(today.getDate() + 15);
+
+  const hashCode = generateHashCode(usn, book_id, today, endDate);
+
+  /*const query = `
+        INSERT INTO orders (usn, book_id, order_date, end_date, hash_code)
+        VALUES ($1, $2, $3, $4, $5)
+    `;
+  const values = [usn, book_id, today, endDate, hashCode];
+
+  pool.query(query, values, (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error adding order to database");
+      return;
+    }
+    console.log("Order added successfully");
+    //res.redirect("/users/ledger"); // Redirect to dashboard after adding order
+  });*/
+
+  // Query the lib_users table for user information
+  
+
+  // Query the books table for book information
+  pool.query("SELECT * FROM books WHERE book_id = $1", [book_id], (err2, result2) => {
+    if (err2) {
+      console.error(err2);
+      res.status(500).send("Error retrieving book information");
+      return;
+    }
+    const bookData = result2.rows;
+    console.log(bookData);
+
+    // Render the /users/ordernow view and pass user and book data to it
+
+
+    res.render('ordernow', { usn, bookData });
+  });
 });
 
 
