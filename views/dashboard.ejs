@@ -22,8 +22,8 @@
         }
 
         .container {
-            max-width: 800px;
-            margin-top: 50px;
+            max-width: 2500px;
+            margin-top: 5px;
         }
 
         .card {
@@ -32,6 +32,7 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s;
             width: 250px;
+            height: 396px;
             margin: 20px;
             background-color: #ffffff;
         }
@@ -139,6 +140,14 @@
             margin-bottom: 10px;
         }
 
+        .announcement {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
         /* Add more styles as needed */
     </style>
 </head>
@@ -153,43 +162,34 @@
             <button type="submit">Search</button>
         </form>
     </div>
-
     <div class="container">
         <div class="row">
             <% books.forEach(book=> { %>
                 <div class="col-md-4">
                     <div class="card">
-                        <img src="<%= book.book_url %>" class="card-img-top" alt="Book Cover">
+                        <center>
+                            <img src="<%= book.book_url %>" class="card-img-top" alt="Book Cover">
+                        </center>
                         <div class="card-body">
                             <h5 class="card-title">
                                 <%= book.title %>
                             </h5>
-                            <p class="card-text">Author: <%= book.author_name %>
+                            <p class="card-text"><strong>Author:</strong>
+                                <%= book.author_name %>
                             </p>
-                            <p class="card-text">Published Year: <%= book.published_year %>
+                            <p class="card-text"><strong>Published Year:</strong>
+                                <%= book.published_year %>
                             </p>
-                            <% if (book.availability) { %>
-                                <div class="book-available">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="book_<%= book.book_id %>"
-                                            value="<%= book.book_id %>">
-                                        <label class="form-check-label" for="book_<%= book.book_id %>">Book
-                                            Available</label>
-                                    </div>
-                                </div>
-                                <% } else { %>
-                                    <div class="book-not-available">
-                                        <p>Book Not Available</p>
-                                    </div>
-                                    <% } %>
+                            <form action="/users/addtocart" method="GET">
+                                <input type="hidden" name="book_id" value="<%= book.book_id %>">
+                                <button type="submit" class="btn btn-primary btn-block">Add To Cart</button>
+                            </form>
                         </div>
                     </div>
                 </div>
                 <% }); %>
         </div>
     </div>
-
-
 </body>
 
 </html>

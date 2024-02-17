@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const flash = require("express-flash");
 const session = require("express-session");
 const passport = require("passport");
-
+const sha256 = require("sha256");
 
 
 app.use(express.static('public'))
@@ -170,7 +170,7 @@ app.get("users/logouts", (req, res) => {
 });
 
 app.get('/users/dashboard', (req, res) => {
-  pool.query('SELECT * FROM books', (err, result) => {
+  pool.query('SELECT * FROM books ORDER BY title ASC ', (err, result) => {
     if (err) {
       console.error(err);
       res.status(500).send('Error fetching books');
@@ -197,7 +197,7 @@ app.get("/users/search", (req, res) => {
 });
 
 // GET request handler for /users/addtocart route
-app.get("/users/addtocart", (req, res) => {
+app.get('/users/addtocart', (req, res) => {
   const bookId = req.query.book_id;
   console.log(bookId);
 
@@ -221,7 +221,49 @@ app.get("/users/addtocart", (req, res) => {
   });
 });
 
+app.get('/users/ordernow', (req, res) => {
+  const { usn, book_id } = req.query;
+  res.render('ordernow', { usn, book_id });
+});
+
+
+app.get('/users/ordernow', (req, res) => {
+  res.render("ordernow");
+});
+
+
+const cron = require('node-cron');
+
+cron.schedule('0 0 * * *', async () => {
+  try {
+    // Connect to the database
+    const client = await pool.connect();
+
+    // Query for overdue orders
+    const currentDate = new Date();
+    const overdueOrdersQuery = `
+      UPDATE orders
+      SET fine = fine + 1
+      WHERE end_date < $1 AND returned = false;
+    `;
+    await client.query(overdueOrdersQuery, [currentDate]);
+
+    // Release the database connection
+    client.release();
+
+    console.log('Daily fine calculation task completed successfully.');
+  } catch (err) {
+    console.error('Error running daily fine calculation task:', err);
+  }
+});
+
 
 app.listen(port, (req, res) => {
   console.log(`connected to ${port}`);
 })
+
+function generateHashCode(usn, book_id, order_date, end_date) {
+  const data = JSON.stringify({ usn, book_id, order_date, end_date });
+  const hashCode = "0000" + sha256(data); // Add "0000" to the beginning of the hash code
+  return hashCode;
+}
