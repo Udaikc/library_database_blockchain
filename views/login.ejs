@@ -90,16 +90,16 @@
         </ul>
 
         <h2>Login Page</h2>
-        <form action="/user/login" method="POST">
-            <label for="name">USN:</label>
+        <form action="/users/login" method="POST">
+            <label for="usn">USN:</label>
             <input type="text" id="usn" placeholder="USN" required>
 
             <label for="password">Password:</label>
             <input type="password" id="password" placeholder="Password" required>
 
-            <input type="submit" value="login"><br><br>
+            <a href="/users/dashboard"><input type="submit" value="login"></a><br><br>
 
-            <a href="/user/register"><u>Haven't Signed up ? Signup </u></a>
+            <a href="/users/register"><u>Haven't Signed up ? Signup </u></a>
         </form>
 
     </div>

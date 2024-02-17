@@ -25,7 +25,8 @@ app.use(passport.session());
 
 app.use(flash());
 
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(bodyParser.json());
 
 
@@ -48,15 +49,15 @@ app.get('/', (req, res) => {
   res.render("index");
 });
 
-app.get('/user/login', (req, res) => {
+app.get('/users/login', (req, res) => {
   res.render("login");
 });
 
-app.get('/user/register', (req, res) => {
+app.get('/users/register', (req, res) => {
   res.render("register");
 });
 
-app.post('/user/register', async (req, res) => {
+app.post('/users/register', async (req, res) => {
   let { name, email, usn, password } = req.body;
   console.log("Request body:", req.body);
   console.log("Password:", password);
@@ -73,12 +74,10 @@ app.post('/user/register', async (req, res) => {
   if (errors.length > 0) {
     res.render("register", { errors })
   } else {
-    const hashedpassword = await bcrypt.hash(password, 10);
-    console.log(hashedpassword);
 
     pool.query(
       `SELECT * FROM lib_user WHERE email = $1`,
-      [usn],
+      [email],
       (err, results) => {
         if (err) {
           throw err;
@@ -91,7 +90,7 @@ app.post('/user/register', async (req, res) => {
         } else {
           pool.query(`INSERT INTO lib_user(username,email,usn,password)
           VALUES ($1 ,$2, $3, $4)
-          RETURNING usn , password`, [name, email, usn, hashedpassword], (err, results) => {
+          RETURNING usn , password`, [name, email, usn, password], (err, results) => {
             if (err) {
               throw err;
             }
@@ -118,10 +117,30 @@ app.get("/users/register", checkAuthenticated, (req, res) => {
   res.render("register.ejs");
 });
 
-app.get("/users/login", checkAuthenticated, (req, res) => {
-  // flash sets a messages variable. passport sets the error message
-  console.log(req.session.flash.error);
-  res.render("login.ejs");
+app.post('/users/login', async (req, res) => {
+  let { usn, password } = req.body;
+  console.log(req.body.usn);
+  console.log(req.body.password);
+  let errors = [];
+
+
+  // Query the database to check if the username and password match
+  pool.query('SELECT * FROM lib_user WHERE usn = $1 AND password = $2', [usn, password], (err, result) => {
+    if (err) {
+      console.error('Error executing query', err);
+      res.status(500).send('Internal Server Error');
+      return;
+    }
+
+    // If there's no user found with the provided credentials, redirect back to the login page
+    if (result.rows.length === 0) {
+      res.redirect("dashboard")
+      return;
+    }
+
+    // If the user exists and the password matches, redirect to the dashboard
+
+  });
 });
 
 app.get('/users/addbooks', (req, res) => {
@@ -144,7 +163,7 @@ app.post('/users/addbooks', (req, res) => {
 });
 
 
-app.get("user/logouts", (req, res) => {
+app.get("users/logouts", (req, res) => {
   req.logOut();
   req.flash("sucess_msg", "you have sucessfully logged out");
   res.redirect("/user/login");
