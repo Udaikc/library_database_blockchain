@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Details</title>
+    <title>Your Order Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         header {
             text-align: center;
@@ -16,44 +17,105 @@
             height: auto;
         }
 
+        /* Custom CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
         .container {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .book-details {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 10px;
+            margin: auto;
             background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .book-image {
-            width: 100px;
-            /* Adjust image size as needed */
-            height: auto;
-            margin-right: 10px;
-        }
-
-        .return-button {
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .order-details {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .order-details h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .order-details p {
+            margin: 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .order-item {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .order-item img {
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+        }
+
+        .order-item-details {
+            flex-grow: 1;
+        }
+
+        .order-item-details h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .order-item-details p {
+            margin: 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .order-action {
+            text-align: center;
+        }
+
+        .order-action button {
             padding: 10px 20px;
-            background-color: #007bff;
+            font-size: 16px;
+            background-color: #ff5722;
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        .return-button:hover {
-            background-color: #0056b3;
+        .order-action button:hover {
+            background-color: #f44336;
+        }
+
+        .navbar {
+            background-color: #333;
+        }
+
+        .navbar-brand,
+        .navbar-nav a {
+            color: #fff;
+            padding: 10px 15px;
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover,
+        .navbar-nav a:hover {
+            background-color: #555;
         }
     </style>
 </head>
@@ -62,37 +124,60 @@
     <header>
         <a href="https://sjbit.edu.in/" target="_blank"><img src="/images/header.jpg.png" alt="Header Image"></a>
     </header>
+    <nav class="navbar">
+        <a class="navbar-brand">Your Order</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="">Orders</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Ledger</a>
+            </li>
+        </ul>
+    </nav>
     <div class="container">
-
-        <p>USN: <%= usn %>
-        </p>
-        <!-- Print other user details as needed -->
-
-        <h2>Book Details</h2>
-        <% if (bookData.length> 0) { %>
-            <% bookData.forEach(book=> { %>
-                <div class="book-details">
-                    <img class="book-image" src="<%= book.book_url %>" alt="<%= book.title %>">
-                    <div>
-                        <p><strong>Title:</strong>
-                            <%= book.title %>
-                        </p>
-                        <p><strong>Author:</strong>
-                            <%= book.author_name %>
-                        </p>
-                        <p><strong>Published Year:</strong>
-                            <%= book.published_year %>
-                        </p>
-                        <!-- Add more book details as needed -->
-                    </div>
-                </div>
-                <% }); %>
-                    <% } else { %>
-                        <p>No book details found</p>
-                        <% } %>
-                            <center>
-                                <button class="return-button">Return</button>
-                            </center>
+        <h1>Your Order Details</h1>
+        <% if(orderDetails && !orderDetails.returned) { %>
+            <div class="order-details">
+                <h2>Order #<%= selectValues%>
+                </h2>
+                <h2>USN = <%= usn %>
+                </h2>
+                <BOLD>
+                    <p>Order Date: <%= orderDetails.start_date %>
+                    </p>
+                    <p>Delivery Date: <%= orderDetails.end_date %>
+                    </p>
+                </BOLD>
+                <h2>Fine: <%= orderDetails.fine %>
+                </h2>
+                <!-- Add more details as needed -->
+            </div>
+            <% } %>
+                <% if(bookData && bookData.length> 0) { %>
+                    <% bookData.forEach(book=> { %>
+                        <div class="order-item">
+                            <img src="<%= book.book_url %>" alt="Book Cover">
+                            <div class="order-item-details">
+                                <h3>
+                                    <%= book.title %>
+                                </h3>
+                                <p>Author: <%= book.author_name %>
+                                </p>
+                                <p>Published Year: <%= book.published_year %>
+                                </p>
+                                <!-- Add more book details as needed -->
+                            </div>
+                        </div>
+                        <% }); %>
+                            <% } else { %>
+                                <p>No order details available.</p>
+                                <% } %>
+                                    <% if(orderDetails && !orderDetails.returned) { %>
+                                        <div class="order-action">
+                                            <button>Return Order</button>
+                                        </div>
+                                        <% } %>
     </div>
 </body>
 
