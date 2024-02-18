@@ -152,7 +152,10 @@
                 <h2>Fine: <%= orderDetails.fine %>
                 </h2>
                 <div class="order-action">
-                    <button>Return Order</button>
+                    <form action="/users/returned" method="post">
+                        <input type="hidden" name="order_id" value="<%= selectValues %>">
+                        <button type="submit">Return Order</button>
+                    </form>
                 </div>
                 <!-- Add more details as needed -->
             </div>

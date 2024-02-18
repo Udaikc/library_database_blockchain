@@ -326,23 +326,35 @@ app.post('/users/ledger', (req, res) => {
           return res.status(500).send("Error updating forward hash in ledger");
         }
 
-        // Add a new entry into the ledger table with the new hash_code, book_id, and '0' for forward_hash
-        const insertLedgerQuery = `
-          INSERT INTO ledger (previous_hash, book_id, forward_hash)
-          VALUES ($1, $2, '0');
+        // Deduct total_number by one in the books table for the corresponding book_id
+        const updateTotalNumberQuery = `
+          UPDATE books SET total_number = total_number - 1 WHERE book_id = $1;
         `;
-        const insertLedgerValues = [hashcode, book_id];
 
-        pool.query(insertLedgerQuery, insertLedgerValues, (ledgerErr, ledgerResult) => {
-          if (ledgerErr) {
-            console.error(ledgerErr);
-            return res.status(500).send("Error adding ledger entry to database");
+        pool.query(updateTotalNumberQuery, [book_id], (updateTotalNumberErr, updateTotalNumberResult) => {
+          if (updateTotalNumberErr) {
+            console.error(updateTotalNumberErr);
+            return res.status(500).send("Error updating total_number in books table");
           }
 
-          console.log("Ledger entry added successfully");
+          // Add a new entry into the ledger table with the new hash_code, book_id, and '0' for forward_hash
+          const insertLedgerQuery = `
+            INSERT INTO ledger (previous_hash, book_id, forward_hash)
+            VALUES ($1, $2, '0');
+          `;
+          const insertLedgerValues = [hashcode, book_id];
 
-          // Redirect to dashboard after adding ledger entry
-          res.redirect("/users/ledger");
+          pool.query(insertLedgerQuery, insertLedgerValues, (ledgerErr, ledgerResult) => {
+            if (ledgerErr) {
+              console.error(ledgerErr);
+              return res.status(500).send("Error adding ledger entry to database");
+            }
+
+            console.log("Ledger entry added successfully");
+
+            // Redirect to dashboard after adding ledger entry
+            res.redirect("/users/ledger");
+          });
         });
       });
     } else {
@@ -368,6 +380,30 @@ app.post('/users/ledger', (req, res) => {
   });
 });
 
+app.get('/users/returned', (req, res) => {
+  const { order_id } = req.body;
+
+  // Logic to update total_number in the books table
+  pool.query("UPDATE books SET total_number = total_number + 1 WHERE book_id IN (SELECT book_id FROM orders WHERE order_id = $1)", [order_id], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Error updating total_number in the books table");
+    }
+
+    // Logic to set returned as true in the orders table
+    pool.query("UPDATE orders SET returned = true WHERE order_id = $1", [order_id], (updateErr, updateResult) => {
+      if (updateErr) {
+        console.error(updateErr);
+        return res.status(500).send("Error updating returned status in the orders table");
+      }
+
+      console.log("Order returned successfully");
+
+      // Redirect to dashboard after updating total_number and returned status
+      res.redirect("/users/dashboard");
+    });
+  });
+});
 
 
 app.get('/users/ordernow', (req, res) => {
