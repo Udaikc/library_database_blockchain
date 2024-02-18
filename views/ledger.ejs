@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ledger Entries</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        header {
+            text-align: center;
+            margin: 0;
+        }
+
+        header img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Custom CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .navbar {
+            background-color: #333;
+        }
+
+        .navbar-brand,
+        .navbar-nav a {
+            color: #fff;
+            padding: 10px 15px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="https://sjbit.edu.in/" target="_blank"><img src="/images/header.jpg.png" alt="Header Image"></a>
+    </header>
+    <nav class="navbar">
+        <a class="navbar-brand">Ledger</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/users/logouts">Logout</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/users/ordernow">Order</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container mt-4">
+        <h2 class="mb-4">Ledger Entries</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Previous Hash</th>
+                    <th>Book ID</th>
+                    <th>Forward Hash</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% ledgerEntries.forEach((entry, index)=> { %>
+                    <tr>
+                        <td>
+                            <%= index + 1 %>
+                        </td>
+                        <td>
+                            <%= entry.previous_hash %>
+                        </td>
+                        <td>
+                            <%= entry.book_id %>
+                        </td>
+                        <td>
+                            <%= entry.forward_hash %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

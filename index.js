@@ -166,7 +166,7 @@ app.post('/users/addbooks', (req, res) => {
 app.get("users/logouts", (req, res) => {
   req.logOut();
   req.flash("sucess_msg", "you have sucessfully logged out");
-  res.redirect("/user/login");
+  res.redirect("/users/login");
 });
 
 app.get('/users/dashboard', (req, res) => {
@@ -247,7 +247,7 @@ app.post('/users/ordernow', (req, res) => {
     const orderId = insertResult.rows[0].order_id;
 
     const selectQuery = `
-      SELECT order_date AS start_date, end_date, fine , returned
+      SELECT order_date AS start_date, end_date, fine , returned , hash_code
       FROM orders
       WHERE order_id = $1;
     `;
@@ -276,6 +276,95 @@ app.post('/users/ordernow', (req, res) => {
         res.render("ordernow", { usn, bookData, orderDetails, selectValues });
       });
     });
+  });
+});
+
+app.get('/users/ledger', (req, res) => {
+  // Query the ledger table to retrieve ledger entries
+  const query = `
+    SELECT * FROM ledger;
+  `;
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      console.error("Error retrieving ledger entries:", err);
+      return res.status(500).send("Error retrieving ledger entries");
+    }
+
+    const ledgerEntries = result.rows;
+
+    // Render the ledger.ejs file and pass the ledgerEntries data to it
+    res.render("ledger", { ledgerEntries });
+  });
+});
+
+app.post('/users/ledger', (req, res) => {
+  const { hashcode, book_id } = req.body;
+
+  // Check if there are entries in the ledger table with forward_hash = '0'
+  const checkZeroForwardHashQuery = `
+    SELECT * FROM ledger WHERE forward_hash = '0';
+  `;
+
+  pool.query(checkZeroForwardHashQuery, (zeroForwardHashErr, zeroForwardHashResult) => {
+    if (zeroForwardHashErr) {
+      console.error(zeroForwardHashErr);
+      return res.status(500).send("Error checking zero forward hash entries");
+    }
+
+    const zeroForwardHashEntries = zeroForwardHashResult.rows;
+
+    // If there are entries with forward_hash = '0', update their forward_hash with the new hash_code
+    if (zeroForwardHashEntries.length > 0) {
+      const updateForwardHashQuery = `
+        UPDATE ledger SET forward_hash = $1 WHERE forward_hash = '0';
+      `;
+
+      pool.query(updateForwardHashQuery, [hashcode], (updateErr, updateResult) => {
+        if (updateErr) {
+          console.error(updateErr);
+          return res.status(500).send("Error updating forward hash in ledger");
+        }
+
+        // Add a new entry into the ledger table with the new hash_code, book_id, and '0' for forward_hash
+        const insertLedgerQuery = `
+          INSERT INTO ledger (previous_hash, book_id, forward_hash)
+          VALUES ($1, $2, '0');
+        `;
+        const insertLedgerValues = [hashcode, book_id];
+
+        pool.query(insertLedgerQuery, insertLedgerValues, (ledgerErr, ledgerResult) => {
+          if (ledgerErr) {
+            console.error(ledgerErr);
+            return res.status(500).send("Error adding ledger entry to database");
+          }
+
+          console.log("Ledger entry added successfully");
+
+          // Redirect to dashboard after adding ledger entry
+          res.redirect("/users/ledger");
+        });
+      });
+    } else {
+      // If there are no entries with forward_hash = '0', simply add the new entry with the given hash_code and book_id
+      const insertLedgerQuery = `
+        INSERT INTO ledger (previous_hash, book_id, forward_hash)
+        VALUES ($1, $2, '0');
+      `;
+      const insertLedgerValues = [hashcode, book_id];
+
+      pool.query(insertLedgerQuery, insertLedgerValues, (ledgerErr, ledgerResult) => {
+        if (ledgerErr) {
+          console.error(ledgerErr);
+          return res.status(500).send("Error adding ledger entry to database");
+        }
+
+        console.log("Ledger entry added successfully");
+
+        // Redirect to dashboard after adding ledger entry
+        res.redirect("/users/ledger");
+      });
+    }
   });
 });
 

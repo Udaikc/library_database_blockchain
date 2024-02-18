@@ -128,10 +128,10 @@
         <a class="navbar-brand">Your Order</a>
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="">Orders</a>
+                <a class="nav-link" href="/users/dashboard">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Ledger</a>
+                <a class="nav-link" href="/users/ledger">Ledger</a>
             </li>
         </ul>
     </nav>
@@ -151,6 +151,9 @@
                 </BOLD>
                 <h2>Fine: <%= orderDetails.fine %>
                 </h2>
+                <div class="order-action">
+                    <button>Return Order</button>
+                </div>
                 <!-- Add more details as needed -->
             </div>
             <% } %>
@@ -166,6 +169,11 @@
                                 </p>
                                 <p>Published Year: <%= book.published_year %>
                                 </p>
+                                <form action="/users/ledger" method="post">
+                                    <input type="hidden" name="hashcode" value="<%= orderDetails.hash_code %>">
+                                    <input type="hidden" name="book_id" value="<%= book.book_id %>">
+                                    <button type="submit">Update Ledger</button>
+                                </form>
                                 <!-- Add more book details as needed -->
                             </div>
                         </div>
@@ -175,10 +183,8 @@
                                 <% } %>
                                     <% if(orderDetails && !orderDetails.returned) { %>
                                         <div class="order-action">
-                                            <button>Return Order</button>
+                                            <% } %>
                                         </div>
-                                        <% } %>
-    </div>
 </body>
 
 </html>
