@@ -172,7 +172,10 @@
                                 <p class="card-text"><strong>Published Year:</strong>
                                     <%= book.published_year %>
                                 </p>
-                                <a href="/books/<%= book.book_id %>" class="btn btn-primary btn-block">Add to Cart</a>
+                                <form action="/users/addtocart" method="GET">
+                                    <input type="hidden" name="book_id" value="<%= book.book_id %>">
+                                    <button type="submit" class="btn btn-primary btn-block">Add To Cart</button>
+                                </form>
                             </div>
                         </div>
                     </div>

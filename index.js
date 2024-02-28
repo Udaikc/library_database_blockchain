@@ -89,14 +89,13 @@ app.post('/users/register', async (req, res) => {
           res.render("register", { errors })
         } else {
           pool.query(`INSERT INTO lib_user(username,email,usn,password)
-          VALUES ($1 ,$2, $3, $4)
-          RETURNING usn , password`, [name, email, usn, password], (err, results) => {
+          VALUES ($1 ,$2, $3, $4)`, [name, email, usn, password], (err, results) => {
             if (err) {
               throw err;
             }
             console.log(results.rows);
             req.flash("sucess_msg", "you are now registered please log in");
-            res.redirect("/user/login");
+            res.redirect("/users/login");
           }
 
           );
@@ -409,6 +408,7 @@ app.get('/users/returned', (req, res) => {
 app.get('/users/ordernow', (req, res) => {
   res.render("ordernow");
 });
+
 
 
 const cron = require('node-cron');
