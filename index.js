@@ -379,7 +379,7 @@ app.post('/users/ledger', (req, res) => {
   });
 });
 
-app.get('/users/returned', (req, res) => {
+app.post('/users/returned', (req, res) => {
   const { order_id } = req.body;
 
   // Logic to update total_number in the books table
@@ -390,7 +390,7 @@ app.get('/users/returned', (req, res) => {
     }
 
     // Logic to set returned as true in the orders table
-    pool.query("UPDATE orders SET returned = true WHERE order_id = $1", [order_id], (updateErr, updateResult) => {
+    pool.query("UPDATE orders SET returned =  TRUE WHERE order_id = $1", [order_id], (updateErr, updateResult) => {
       if (updateErr) {
         console.error(updateErr);
         return res.status(500).send("Error updating returned status in the orders table");
