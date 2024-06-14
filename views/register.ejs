@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register page</title>
+    <title>Login Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('/images/register_image.jpg');
+            background-image: url('/images/lib_1.jpg');
             background-size: cover;
             background-position: center;
             height: 100vh;
@@ -16,53 +16,161 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
+            color: #333;
         }
 
         header {
             text-align: center;
-            margin: 0;
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         header img {
             max-width: 100%;
             height: auto;
+            width: 1986px;
+            height: 182px;
         }
 
         .container {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             max-width: 400px;
             width: 100%;
             margin: auto;
-            /* Center the container */
-        }
-
-        form {
             text-align: center;
         }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            box-sizing: border-box;
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
         }
 
-        #button {
+        form {
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus {
+            border-color: #4caf50;
+        }
+
+        #password-toggle {
+            margin: -30px 10px 0 0;
+            float: right;
+            cursor: pointer;
+            color: #555;
+        }
+
+        button {
             background-color: #4caf50;
             color: white;
             padding: 10px 15px;
             border: none;
+            border-radius: 25px;
             cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .options a {
+            text-decoration: none;
+            color: #4caf50;
+        }
+
+        .alert {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .social-login {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .social-login a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48%;
+            transition: background-color 0.3s;
+        }
+
+        .social-login a.facebook {
+            background-color: #3b5998;
+        }
+
+        .social-login a.facebook:hover {
+            background-color: #2d4373;
+        }
+
+        .social-login a.google {
+            background-color: #db4437;
+        }
+
+        .social-login a.google:hover {
+            background-color: #c23321;
+        }
+
+        .social-login img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
         }
 
         /* Responsive Styles */
         @media (max-width: 600px) {
             .container {
                 max-width: 100%;
+                padding: 20px;
+            }
+
+            header img {
+                width: 100%;
+                height: auto;
             }
         }
     </style>
@@ -70,42 +178,68 @@
 
 <body>
     <header>
-        <a href="https://sjbit.edu.in/" target="_blank"><img src="/images/header.jpg.png" alt="Header Image"></a>
+        <a href="https://www.hostelworld.com/" target="_blank">
+            <img src="/images/cryptostay_header.png" alt="Header Image" width="1986" height="182">
+        </a>
     </header>
 
     <div class="container">
-        <h2>Registration Form</h2>
-        <form id="sampleForm" action="/users/register" method="POST">
-            <label for="name">Username:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
+        <h2>Login</h2>
+        <form id="loginForm" action="/users/login" method="POST">
             <label for="usn">USN:</label>
-            <input type="text" id="usn" name="usn" required>
+            <input type="text" id="usn" name="usn" placeholder="USN" required>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <span id="password-toggle" onclick="togglePasswordVisibility()">👁️</span>
 
+            <div class="options">
+                <label>
+                    <input type="checkbox" name="remember" id="remember">
+                    Remember Me
+                </label>
+                <a href="/users/forgot-password">Forgot Password?</a>
+            </div>
 
-            <input type="submit" value="register" id="button"><br><br>
-
-            <ul>
-                <% if (typeof errors !=='undefined' ) { %>
-                    <% errors.forEach(error=> { %>
-                        <li>
-                            <%= error.message %>
-                        </li>
-                        <% }) %>
-                            <% } %>
-
-            </ul>
-
-            <a href="/users/login"><u>Login in</u></a>
+            <button type="submit">Login</button>
         </form>
+
+        <p style="text-align:center; margin-top: 20px;">
+            <a href="/users/register">Don't have an account? Sign Up</a>
+        </p>
+
+        <div class="social-login">
+            <a href="/auth/facebook" class="facebook">
+                <img src="/images/facebook-icon.jpg" alt="Facebook Icon">Login with Facebook
+            </a>
+            <a href="/auth/google" class="google">
+                <img src="/images/google-icon.png" alt="Google Icon">Login with Google
+            </a>
+        </div>
     </div>
 
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const passwordToggle = document.getElementById('password-toggle');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordToggle.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                passwordToggle.textContent = '👁️';
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            const usn = document.getElementById('usn').value;
+            const password = document.getElementById('password').value;
+            if (!usn || !password) {
+                event.preventDefault();
+                alert('Please fill in both fields.');
+            }
+        });
+    </script>
 </body>
 
 </html>

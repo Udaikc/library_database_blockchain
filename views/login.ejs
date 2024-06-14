@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('/images/lib.jpg');
+            background-image: url('/images/lib_1.jpg');
             background-size: cover;
             background-position: center;
             height: 100vh;
@@ -16,32 +16,59 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
         }
 
         header {
             text-align: center;
             margin: 0;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
         }
 
         header img {
             max-width: 100%;
             height: auto;
+            width: 1986px;
+            height: 182px;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            width: 100%;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
         }
 
         .container {
             background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             max-width: 400px;
             width: 100%;
-            margin: auto;
-            /* Center the container */
+        }
+
+        h2 {
+            margin-top: 0;
         }
 
         form {
-            text-align: center;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
         }
 
         input {
@@ -57,6 +84,24 @@
             padding: 10px 15px;
             border: none;
             cursor: pointer;
+            width: 100%;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .options a {
+            text-decoration: none;
+            color: #4caf50;
+        }
+
+        .alert {
+            color: red;
+            font-size: 14px;
+            text-align: center;
         }
 
         /* Responsive Styles */
@@ -64,26 +109,39 @@
             .container {
                 max-width: 100%;
             }
+
+            header img {
+                width: 100%;
+                height: auto;
+            }
         }
     </style>
 </head>
 
 <body>
     <header>
-        <a href="https://sjbit.edu.in/" target="_blank"><img src="/images/header.jpg.png" alt="Header Image"></a>
+        <a href="https://www.hostelworld.com/" target="_blank">
+            <img src="/images/cryptostay_header.png" alt="Header Image" width="1986" height="182">
+        </a>
     </header>
+
+    ,<!--<div class="nav">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+    </div>-->
 
     <div class="container">
         <ul>
             <% if (messages.sucess_msg) { %>
-                <li>
+                <li class="alert">
                     <%= messages.sucess_msg %>
                 </li>
                 <% } %>
         </ul>
         <ul>
             <% if (messages.error) { %>
-                <li>
+                <li class="alert">
                     <%= messages.error %>
                 </li>
                 <% } %>
@@ -92,18 +150,25 @@
         <h2>Login Page</h2>
         <form action="/users/login" method="POST">
             <label for="usn">USN:</label>
-            <input type="text" id="usn" placeholder="USN" required>
+            <input type="text" id="usn" name="usn" placeholder="USN" required>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" placeholder="Password" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
 
-            <a href="/users/dashboard"><input type="submit" value="login"></a><br><br>
+            <div class="options">
+                <label>
+                    <input type="checkbox" name="remember" id="remember">
+                    Remember Me
+                </label>
+                <a href="/users/forgot-password">Forgot Password?</a>
+            </div>
 
-            <a href="/users/register"><u>Haven't Signed up ? Signup </u></a>
+            <button type="submit">Login</button>
         </form>
-
+        <p style="text-align:center; margin-top: 20px;">
+            <a href="/users/register">Haven't Signed up? Signup</a>
+        </p>
     </div>
-
 </body>
 
 </html>
