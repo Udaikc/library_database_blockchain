@@ -7,22 +7,13 @@
     <title>Your Order Details</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        header {
-            text-align: center;
-            margin: 0;
-        }
-
-        header img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Custom CSS styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #d4c1a6;
+            /* Background color */
             margin: 0;
             padding: 20px;
+            color: #333;
         }
 
         .container {
@@ -30,67 +21,101 @@
             margin: auto;
             background-color: #fff;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
 
-        h1 {
-            font-size: 24px;
+        header {
+            text-align: center;
             margin-bottom: 20px;
         }
 
+        header img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #007bff;
+            /* Link color from Bootstrap */
+        }
+
         .order-details {
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #ccc;
+            /* Lighter border color */
             padding-bottom: 20px;
             margin-bottom: 20px;
         }
 
         .order-details h2 {
-            font-size: 20px;
+            font-size: 24px;
             margin-bottom: 10px;
+            color: #007bff;
+            /* Link color from Bootstrap */
         }
 
         .order-details p {
             margin: 0;
             font-size: 16px;
             color: #555;
+            margin-bottom: 5px;
         }
 
         .order-item {
-            display: flex;
-            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            /* Lighter border color */
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: #ffffff;
+            /* White background */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .order-item img {
-            width: 100px;
-            height: 100px;
+
+            /* Adjusted width */
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
             margin-right: 20px;
+            border: 1px solid #ccc;
+            /* Lighter border color */
+            float: left;
         }
 
         .order-item-details {
-            flex-grow: 1;
+            overflow: hidden;
         }
 
         .order-item-details h3 {
             font-size: 18px;
             margin-bottom: 5px;
+            color: #212121;
+            font-weight: 500;
         }
 
         .order-item-details p {
             margin: 0;
             font-size: 16px;
             color: #555;
+            margin-bottom: 5px;
         }
 
         .order-action {
             text-align: center;
+            margin-top: 20px;
         }
 
         .order-action button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-size: 16px;
-            background-color: #ff5722;
+            background-color: #007bff;
+            /* Primary color from Bootstrap */
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -99,11 +124,14 @@
         }
 
         .order-action button:hover {
-            background-color: #f44336;
+            background-color: #0056b3;
+            /* Darker shade of primary color */
         }
 
         .navbar {
-            background-color: #333;
+            background-color: #211f17;
+            /* Updated navbar background color */
+            margin-bottom: 20px;
         }
 
         .navbar-brand,
@@ -115,7 +143,57 @@
 
         .navbar-brand:hover,
         .navbar-nav a:hover {
-            background-color: #555;
+            background-color: #1e1c15;
+            /* Darker shade of navbar color */
+        }
+
+        /* Additional styles for cards */
+        .card {
+            border: 1px solid #ccc;
+            /* Lighter border color */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            /* White background */
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #212121;
+        }
+
+        .card-text {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            /* Primary color from Bootstrap */
+            border-color: #007bff;
+            /* Primary color from Bootstrap */
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            /* Darker shade of primary color */
+            border-color: #0056b3;
+            /* Darker shade of primary color */
         }
     </style>
 </head>
@@ -141,55 +219,55 @@
         <h1>Your Order Details</h1>
         <% if(orderDetails && !orderDetails.returned) { %>
             <div class="order-details">
-                <h2>Order #<%= selectValues%>
+                <h2>Order #<%= selectValues %>
                 </h2>
-                <h2>USN = <%= usn %>
-                </h2>
-                <BOLD>
-                    <p>Order Date: <%= orderDetails.start_date %>
-                    </p>
-                    <p>Delivery Date: <%= orderDetails.end_date %>
-                    </p>
-                </BOLD>
-                <h2>Fine: <%= orderDetails.fine %>
-                </h2>
-                <div class="order-action">
-                    <form action="/users/returned" method="post">
-                        <input type="hidden" name="order_id" value="<%= selectValues %>">
-                        <button type="submit">Return Order</button>
-                    </form>
-                </div>
-                <!-- Add more details as needed -->
+                <p>Security Number: <%= usn %>
+                </p>
+                <p>Check-in Date: <%= orderDetails.start_date %>
+                </p>
+                <p>Check-Out Date: <%= orderDetails.end_date %>
+                </p>
+
+            </div>
+            <div class="order-action">
+                <form action="/users/returned" method="post">
+                    <input type="hidden" name="order_id" value="<%= selectValues %>">
+                    <a href="/users/dashboard"><button type="submit">Check-Out Order</button></a>
+                </form>
             </div>
             <% } %>
                 <% if(bookData && bookData.length> 0) { %>
                     <% bookData.forEach(book=> { %>
-                        <div class="order-item">
-                            <img src="<%= book.book_url %>" alt="Book Cover">
-                            <div class="order-item-details">
-                                <h3>
-                                    <%= book.title %>
-                                </h3>
-                                <p>Author: <%= book.author_name %>
-                                </p>
-                                <p>Published Year: <%= book.published_year %>
-                                </p>
-                                <form action="/users/ledger" method="post">
-                                    <input type="hidden" name="hashcode" value="<%= orderDetails.hash_code %>">
-                                    <input type="hidden" name="book_id" value="<%= book.book_id %>">
-                                    <button type="submit">Update Ledger</button>
-                                </form>
-                                <!-- Add more book details as needed -->
+                        <div class="order-item card">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src="<%= book.book_url %>" alt="Book Cover" class="card-img">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h3 class="card-title">
+                                            <%= book.title %>
+                                        </h3>
+                                        <p class="card-text"><strong>Owner:</strong>
+                                            <%= book.author_name %>
+                                        </p>
+                                        <p class="card-text"><strong>On-Site Year:</strong>
+                                            <%= book.published_year %>
+                                        </p>
+                                        <form action="/users/ledger" method="post">
+                                            <input type="hidden" name="hashcode" value="<%= orderDetails.hash_code %>">
+                                            <input type="hidden" name="book_id" value="<%= book.book_id %>">
+                                            <button type="submit" class="btn btn-primary">Update Ledger</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <% }); %>
                             <% } else { %>
                                 <p>No order details available.</p>
                                 <% } %>
-                                    <% if(orderDetails && !orderDetails.returned) { %>
-                                        <div class="order-action">
-                                            <% } %>
-                                        </div>
+    </div>
 </body>
 
 </html>

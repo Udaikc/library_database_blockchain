@@ -30,23 +30,7 @@
         header img {
             max-width: 100%;
             height: auto;
-            width: 1986px;
-            height: 182px;
-        }
-
-        .nav {
-            display: flex;
-            justify-content: center;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 10px;
             width: 100%;
-        }
-
-        .nav a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            margin: 0 10px;
         }
 
         .container {
@@ -56,64 +40,102 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             max-width: 400px;
             width: 100%;
+            text-align: center;
         }
 
         h2 {
             margin-top: 0;
+            color: #333;
         }
 
         form {
             text-align: left;
+            margin-top: 20px;
         }
 
         label {
             display: block;
             margin-bottom: 5px;
+            color: #333;
         }
 
-        input {
-            width: 100%;
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 20px);
             padding: 10px;
             margin: 10px 0;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
         }
 
-        button {
+        input[type="submit"] {
             background-color: #4caf50;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border: none;
             cursor: pointer;
             width: 100%;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
         }
 
         .options {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 10px;
         }
 
         .options a {
             text-decoration: none;
             color: #4caf50;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .options a:hover {
+            color: #45a049;
         }
 
         .alert {
-            color: red;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
             font-size: 14px;
             text-align: center;
         }
 
-        /* Responsive Styles */
-        @media (max-width: 600px) {
-            .container {
-                max-width: 100%;
-            }
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
 
-            header img {
-                width: 100%;
-                height: auto;
-            }
+        .alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .signup-link {
+            margin-top: 20px;
+        }
+
+        .signup-link a {
+            text-decoration: none;
+            color: #4caf50;
+            transition: color 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            color: #45a049;
         }
     </style>
 </head>
@@ -125,7 +147,7 @@
         </a>
     </header>
 
-    ,<!--<div class="nav">
+    <!--<div class="nav">
         <a href="/">Home</a>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
@@ -134,26 +156,31 @@
     <div class="container">
         <ul>
             <% if (messages.sucess_msg) { %>
-                <li class="alert">
+                <li>
                     <%= messages.sucess_msg %>
                 </li>
                 <% } %>
         </ul>
         <ul>
             <% if (messages.error) { %>
-                <li class="alert">
+                <li>
                     <%= messages.error %>
                 </li>
                 <% } %>
         </ul>
 
+
+
+
         <h2>Login Page</h2>
         <form action="/users/login" method="POST">
             <label for="usn">USN:</label>
-            <input type="text" id="usn" name="usn" placeholder="USN" required>
+            <input type="text" id="usn" name="usn" placeholder="Enter your USN" required>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Password" required>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+            <input type="submit" value="Login" class="submit-btn">
 
             <div class="options">
                 <label>
@@ -162,13 +189,13 @@
                 </label>
                 <a href="/users/forgot-password">Forgot Password?</a>
             </div>
-
-            <button type="submit">Login</button>
         </form>
-        <p style="text-align:center; margin-top: 20px;">
-            <a href="/users/register">Haven't Signed up? Signup</a>
+
+        <p class="signup-link">
+            Haven't Signed up? <a href="/users/register">Signup here</a>
         </p>
     </div>
+
 </body>
 
 </html>
